@@ -1,3 +1,4 @@
+from typing import List
 from twitter_sentiment import retrieving_tweets_polarity
 from transaction_sms import get_transaction_info
 from fastapi import FastAPI
@@ -15,7 +16,13 @@ async def getPolarity(symbol):
     'neg' : neg,
     'neutral' : neutral}
 
-@app.get("/transaction-info")
-async def getTransactionInfo(sms: str):
-    transaction_type,amount = get_transaction_info(sms)
-    return {'type':transaction_type,'amount':amount}
+@app.post("/transaction-info")
+async def getTransactionInfo(sms_list: List[str]):
+
+    response = {}
+    for sms in sms_list:
+        transaction_type,amount = get_transaction_info(sms)
+        response[sms] = {"type": transaction_type,"amount":amount}
+
+    return response
+    
