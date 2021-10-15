@@ -1,4 +1,5 @@
 from twitter_sentiment import retrieving_tweets_polarity
+from transaction_sms import get_transaction_info
 from fastapi import FastAPI
 
 app = FastAPI()
@@ -13,3 +14,8 @@ async def getPolarity(symbol):
     'pos' : pos,
     'neg' : neg,
     'neutral' : neutral}
+
+@app.get("/transaction-info")
+async def getTransactionInfo(sms: str):
+    transaction_type,amount = get_transaction_info(sms)
+    return {'type':transaction_type,'amount':amount}
