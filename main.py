@@ -2,6 +2,7 @@ from re import search
 from typing import List
 
 from numpy.core import records
+from Sms import Sms
 from twitter_sentiment import retrieving_tweets_polarity
 from transaction_sms import get_transaction_info
 from company_details_from_symbol import get_company_details
@@ -23,12 +24,27 @@ async def getPolarity(symbol):
     'neutral' : neutral}
 
 @app.post("/transaction-info")
-async def getTransactionInfo(sms_list: List[str]):
+async def getTransactionInfo(sms_list: List[Sms]):
 
-    response = {}
+    response = {'CREDIT' : {} , 'DEBIT' : {}}
     for sms in sms_list:
-        transaction_type,amount = get_transaction_info(sms)
-        response[sms] = {"type": transaction_type,"amount":amount}
+        transaction_type,company,amount = get_transaction_info(sms.msg)
+
+        if transaction_type == 'DEBIT' and amount != 'none':
+            if sms.month not in response['DEBIT']:
+                response['DEBIT'][sms.month] = {}
+
+            if company in response['DEBIT'][sms.month]:
+                response['DEBIT'][sms.month][company] += int(amount)
+            else:
+                response['DEBIT'][sms.month][company] = int(amount)
+
+        elif transaction_type == 'CREDIT' and amount != 'none':
+            if sms.month not in response['CREDIT']:
+                response['CREDIT'][sms.month] = 0
+
+            response['CREDIT'][sms.month] += int(amount)
+            
 
     return response
 
