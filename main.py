@@ -38,7 +38,7 @@ async def searchBSE(query:str):
     return JSONResponse(content = search_result.to_dict(orient = "records"))
 
 @app.post(
-    "/aadharVerification",
+    "/aadhar-verification",
     )
 async def _aadhar_verification(aadhar_number: str, aadhar_card: UploadFile = File(...)):
       aadhar_number_extracted = aadhar_card_info(aadhar_card)
