@@ -38,15 +38,15 @@ async def getTransactionInfo(sms_list: List[Sms]):
                 response['DEBIT'][month] = {}
 
             if company in response['DEBIT'][month]:
-                response['DEBIT'][month][company] += int(amount)
+                response['DEBIT'][month][company] += float(amount)
             else:
-                response['DEBIT'][month][company] = int(amount)
+                response['DEBIT'][month][company] = float(amount)
 
         elif transaction_type == 'CREDIT' and amount != 'none':
             if month not in response['CREDIT']:
                 response['CREDIT'][month] = 0
 
-            response['CREDIT'][month] += int(amount)
+            response['CREDIT'][month] += float(amount)
             
 
     return response
