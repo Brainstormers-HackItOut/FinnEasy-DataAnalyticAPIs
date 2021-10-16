@@ -5,7 +5,8 @@ from numpy.core import records
 from twitter_sentiment import retrieving_tweets_polarity
 from transaction_sms import get_transaction_info
 from company_details_from_symbol import get_company_details
-from fastapi import FastAPI
+from fastapi import FastAPI , UploadFile , File
+from aadhar_card_verification import *
 from fastapi.responses import JSONResponse
 
 app = FastAPI()
@@ -35,3 +36,23 @@ async def getTransactionInfo(sms_list: List[str]):
 async def searchBSE(query:str):
     search_result = get_company_details(query)
     return JSONResponse(content = search_result.to_dict(orient = "records"))
+
+@app.post(
+    "/aadharVerification",
+    )
+async def _aadhar_verification(aadhar_number: str, aadhar_card: UploadFile = File(...)):
+      aadhar_number_extracted = aadhar_card_info(aadhar_card)
+      if aadhar_number_extracted == "Not found!":
+            return JSONResponse(
+                content = {
+                    "status": False,
+                    "message": aadhar_number_extracted
+                }
+            )     
+      verification = aadhar_number_extracted == aadhar_number
+      return JSONResponse(
+            content = {
+                "status": verification,
+                "message": "Extracted aadhar number: " + aadhar_number_extracted
+            }
+        )
