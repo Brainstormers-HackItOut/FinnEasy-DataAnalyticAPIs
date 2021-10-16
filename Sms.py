@@ -1,4 +1,5 @@
 from functools import total_ordering
+import pydantic
 
 class BaseModel(pydantic.BaseModel):
     """All data models inherit from this class"""
