@@ -30,20 +30,23 @@ async def getTransactionInfo(sms_list: List[Sms]):
     for sms in sms_list:
         transaction_type,company,amount = get_transaction_info(sms.msg)
 
-        if transaction_type == 'DEBIT' and amount != 'none':
-            if sms.month not in response['DEBIT']:
-                response['DEBIT'][sms.month] = {}
+        split_date =  sms.date.split('-')
+        month =  split_date[0] + '-' +split_date[1]
 
-            if company in response['DEBIT'][sms.month]:
-                response['DEBIT'][sms.month][company] += int(amount)
+        if transaction_type == 'DEBIT' and amount != 'none':
+            if month not in response['DEBIT']:
+                response['DEBIT'][month] = {}
+
+            if company in response['DEBIT'][month]:
+                response['DEBIT'][month][company] += int(amount)
             else:
-                response['DEBIT'][sms.month][company] = int(amount)
+                response['DEBIT'][month][company] = int(amount)
 
         elif transaction_type == 'CREDIT' and amount != 'none':
-            if sms.month not in response['CREDIT']:
-                response['CREDIT'][sms.month] = 0
+            if month not in response['CREDIT']:
+                response['CREDIT'][month] = 0
 
-            response['CREDIT'][sms.month] += int(amount)
+            response['CREDIT'][month] += int(amount)
             
 
     return response
