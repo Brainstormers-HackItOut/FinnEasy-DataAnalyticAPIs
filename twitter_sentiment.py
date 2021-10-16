@@ -8,9 +8,9 @@ def retrieving_tweets_polarity(symbol):
     from textblob import TextBlob
     from Tweet import Tweet
 
-    stock_ticker_map = pd.read_csv('Yahoo-Finance-Ticker-Symbols.csv')
-    stock_full_form = stock_ticker_map[stock_ticker_map['Ticker']==symbol]
-    symbol = stock_full_form['Name'].to_list()[0][0:12]
+    stock_ticker_map = pd.read_csv('EQUITY_L.csv')
+    stock_full_form = stock_ticker_map[stock_ticker_map['SYMBOL']==symbol]
+    symbol = stock_full_form['NAME OF COMPANY'].to_list()[0][0:12]
 
     auth = tweepy.OAuthHandler(ct.consumer_key, ct.consumer_secret)
     auth.set_access_token(ct.access_token, ct.access_token_secret)
