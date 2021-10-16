@@ -30,7 +30,7 @@ def extract_company(sms):
     import re
     from fuzzywuzzy import process
     from fuzzywuzzy import fuzz
-    companies = ['paytm','zomato','swiggy','kotak','icici','hdfc','sbi','reliance','jio']
+    companies = ['paytm','zomato','swiggy','kotak','icici','hdfc','sbi','reliance','jio','bharatpe']
 
     pattern = "([a-zA-Z0-9\.\-]{2,256}\@[a-zA-Z][a-zA-Z]{2,64})"
     groups = re.search(pattern,sms)
