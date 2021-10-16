@@ -49,7 +49,7 @@ async def _aadhar_verification(aadhar_number: str, aadhar_card: UploadFile = Fil
                     "message": aadhar_number_extracted
                 }
             )     
-      verification = aadhar_number_extracted == aadhar_number
+      verification = pattern_match(aadhar_number_extracted,aadhar_number)
       return JSONResponse(
             content = {
                 "status": verification,

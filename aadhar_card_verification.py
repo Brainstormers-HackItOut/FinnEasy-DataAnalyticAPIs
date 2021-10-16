@@ -88,3 +88,11 @@ def aadhar_card_info(aadhar_card):
         aadhar_number = ''.join(info[start : start+aadhar_len].split())
         return aadhar_number
     return "Not found!"
+
+def pattern_match(s1,s2):
+
+    from fuzzywuzzy import fuzz
+
+    thresh = 80
+    score = fuzz.ratio(s1,s2)
+    return score > thresh
