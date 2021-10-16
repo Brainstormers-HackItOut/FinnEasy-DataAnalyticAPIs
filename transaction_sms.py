@@ -28,9 +28,22 @@ def extract_amount(sms):
 
 def extract_company(sms):
     import re
+    from fuzzywuzzy import process
+    from fuzzywuzzy import fuzz
+    companies = ['paytm','zomato','swiggy','kotak','icici','hdfc','sbi','reliance','jio']
+
     pattern = "([a-zA-Z0-9\.\-]{2,256}\@[a-zA-Z][a-zA-Z]{2,64})"
     groups = re.search(pattern,sms)
     company = 'unknown'
     if groups:
-        company = groups.group(1)
+        upi = groups.group(1)
+        upi = upi.split('@')[0]
+        upi_chars = ''
+
+        for char in upi:
+            if not char.isnumeric():
+                upi_chars += char
+
+        company = process.extract(upi_chars, companies, scorer=fuzz.partial_ratio)[0][0]
+         
     return company
